@@ -81,7 +81,7 @@ public class CommentService {
         // 댓글 작성자 검증
         checkUserComment(user, comment);
 
-        comment.update(requestDto.getDescription());
+        comment.updateDescription(requestDto.getDescription());
 
         return new CommentResponseDto(comment);
     }

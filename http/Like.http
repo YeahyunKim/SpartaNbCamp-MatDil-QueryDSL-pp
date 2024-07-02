@@ -4,8 +4,8 @@
 
 
 ### 좋아요 등록 1 - 음식점
-PUT http://localhost:8080/like/RESTAURANT/{{restaurantId}}
+PUT http://localhost:8080/RESTAURANT/{{restaurantId}}/like
 
 //dev pull 받고 다시 확인
 ### 좋아요 등록 2 - 댓글
-PUT http://localhost:8080/like/COMMENT/{{commentId}}
+PUT http://localhost:8080/like/COMMENT/{{commentId}}/like

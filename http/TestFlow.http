@@ -9,7 +9,7 @@ Content-Type: application/json
   "password": "Consumer0!",
   "name": "구매자",
   "email": "consumer@gmail.com",
-  "userType" : "CONSUMER"
+  "userType": "CONSUMER"
 }
 
 
@@ -69,8 +69,7 @@ Content-Type: application/json
   "password": "Supplier0!",
   "name": "판매자",
   "email": "supplier@gmail.com",
-  "userType" : "SUPPLIER"
-
+  "userType": "SUPPLIER"
 }
 
 
@@ -164,9 +163,9 @@ POST http://localhost:8080/restaurants/{{restaurantId}}/foods
 Content-Type: application/json
 
 {
-  "foodname" : "마늘보쌈",
-  "price" : 20000,
-  "description" : "한국인의 입맛, 마늘 보쌈"
+  "foodname": "마늘보쌈",
+  "price": 20000,
+  "description": "한국인의 입맛, 마늘 보쌈"
 }
 
 
@@ -175,9 +174,9 @@ POST http://localhost:8080/restaurants/{{restaurantId}}/foods
 Content-Type: application/json
 
 {
-  "foodname" : "쟁반국수",
-  "price" : 15000,
-  "description" : "한국인의 매운 맛, 쟁반 국수"
+  "foodname": "쟁반국수",
+  "price": 15000,
+  "description": "한국인의 매운 맛, 쟁반 국수"
 }
 
 
@@ -186,9 +185,9 @@ POST http://localhost:8080/restaurants/{{restaurantId}}/foods
 Content-Type: application/json
 
 {
-  "foodname" : "족발",
-  "price" : 24000,
-  "description" : "야들야들한 족발이 매우 싸다!"
+  "foodname": "족발",
+  "price": 24000,
+  "description": "야들야들한 족발이 매우 싸다!"
 }
 
 
@@ -205,9 +204,9 @@ PUT http://localhost:8080/restaurants/{{restaurantId}}/foods/{{foodId}}
 Content-Type: application/json
 
 {
-  "foodname" : "마늘양념보쌈",
-  "price" : 18000,
-  "description" : "마늘보쌈에서 마늘양념보쌈으로 업그레이드 되었고, 가격은 싸졌다!"
+  "foodname": "마늘양념보쌈",
+  "price": 18000,
+  "description": "마늘보쌈에서 마늘양념보쌈으로 업그레이드 되었고, 가격은 싸졌다!"
 }
 
 
@@ -298,7 +297,7 @@ Content-Type: application/json
 
 
 ### 31.좋아요 등록 댓글 - ※ 본인의 글이라 좋아요 불가능
-PUT http://localhost:8080/like/COMMENT/{{commentId}}
+PUT http://localhost:8080/COMMENT/{{commentId}}/like
 
 
 ### 32. 구매 아이디 로그아웃
@@ -328,15 +327,15 @@ Content-Type: application/json
 
 
 ### 34.좋아요 등록 - 댓글
-PUT http://localhost:8080/like/COMMENT/{{commentId}}
+PUT http://localhost:8080/COMMENT/{{commentId}}/like
 
 
 ### 35.좋아요 취소 - 댓글
-PUT http://localhost:8080/like/COMMENT/{{commentId}}
+PUT http://localhost:8080/COMMENT/{{commentId}}/like
 
 
 ### 36.좋아요 등록 - 음식점 ※ 판매자 본인의 음식점에는 좋아요 불가능
-PUT http://localhost:8080/like/RESTAURANT/{{restaurantId_like}}
+PUT http://localhost:8080/RESTAURANT/{{restaurantId_like}}/like
 
 
 ### 37. 판매자 아이디 로그아웃
@@ -355,7 +354,7 @@ Content-Type: application/json
 
 
 ### 39.좋아요 등록 - 음식점
-PUT http://localhost:8080/like/RESTAURANT/{{restaurantId_like}}
+PUT http://localhost:8080/RESTAURANT/{{restaurantId_like}}/like
 
 
 
@@ -371,5 +370,8 @@ POST http://localhost:8080/orders/{{restaurantId}}
 Content-Type: application/json
 
 {
-  "foodId" : [2, 3]
+  "foodId": [
+    2,
+    3
+  ]
 }

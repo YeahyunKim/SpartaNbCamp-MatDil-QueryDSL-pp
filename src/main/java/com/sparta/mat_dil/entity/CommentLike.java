@@ -29,7 +29,7 @@ public class CommentLike extends Timestamped {
         this.Liked = false;
     }
 
-    public void update() {
+    public void updateLiked() {
         this.Liked = !this.Liked;
     }
 }

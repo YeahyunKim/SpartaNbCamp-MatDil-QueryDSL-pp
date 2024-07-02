@@ -2,12 +2,10 @@ package com.sparta.mat_dil.service;
 
 import com.sparta.mat_dil.dto.LikeResponseDto;
 import com.sparta.mat_dil.entity.*;
+import com.sparta.mat_dil.enums.ContentTypeEnum;
 import com.sparta.mat_dil.enums.ErrorType;
 import com.sparta.mat_dil.exception.CustomException;
-import com.sparta.mat_dil.repository.CommentLikeRepository;
-import com.sparta.mat_dil.repository.CommentRepository;
-import com.sparta.mat_dil.repository.RestaurantLikeRepository;
-import com.sparta.mat_dil.repository.RestaurantRepository;
+import com.sparta.mat_dil.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,43 +14,96 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Transactional
 public class LikeService {
-
+    private final UserRepository userRepository;
     private final RestaurantLikeRepository restaurantLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
     private final CommentRepository commentRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public LikeResponseDto updateRestaurantLike(Long contentId, User user) {
+    public LikeResponseDto updateContentLike(ContentTypeEnum contentType, Long contentId, User loginUser) {
+        switch (contentType) {
+            case RESTAURANT:
+                return updateRestaurantLike(contentId, loginUser);
+            case COMMENT:
+                return updateCommentLike(contentId, loginUser);
+            default:
+                throw new IllegalArgumentException("Unsupported content type: " + contentType);
+        }
+    }
 
-        Restaurant restaurant = restaurantRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_RESTAURANT));
-        if (user.getAccountId().equals(restaurant.getUser().getAccountId())) {
+    /** [updateRestaurantLike()] 음식점 좋아요 업데이트
+    * @param contentId 컨텐트 아이디
+    * @param loginUser 로그인 유저 정보
+    * @return LikeResponseDto
+    **/
+    private LikeResponseDto updateRestaurantLike(Long contentId, User loginUser) {
+
+        validateUser(loginUser);
+
+        Restaurant restaurant = getValidatedRestaurant(contentId);
+
+        if (loginUser.getAccountId().equals(restaurant.getUser().getAccountId())) {
             throw new CustomException(ErrorType.CONTENT_OWNER);
         }
 
-        RestaurantLike restaurantLike = restaurantLikeRepository.findByUserAndRestaurant(user, restaurant)
-                .orElseGet(() -> new RestaurantLike(user, restaurant));
+        RestaurantLike restaurantLike = restaurantLikeRepository.findByUserAndRestaurant(loginUser, restaurant)
+                .orElseGet(() -> new RestaurantLike(loginUser, restaurant));
 
+        restaurantLike.updateLiked();
 
-        restaurantLike.update();
         restaurantLikeRepository.save(restaurantLike);
 
         return calculateRestaurantLike(restaurantLike, restaurant);
     }
 
-    public LikeResponseDto updateCommentLike(Long contentId, User user) {
-        Comment comment = commentRepository.findById(contentId).orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_COMMENT));
+    /** [updateCommentLike()] 댓글 좋아요 업데이트
+    * @param contentId 컨텐트 아이디
+    * @param loginUser 로그인 유저 정보
+    * @return LikeResponseDto
+    **/
+    private LikeResponseDto updateCommentLike(Long contentId, User loginUser) {
+        validateUser(loginUser);
 
-        if (user.getAccountId().equals(comment.getUser().getAccountId())) {
+        Comment comment = getValidatedComment(contentId);
+
+        if (loginUser.getAccountId().equals(comment.getUser().getAccountId())) {
             throw new CustomException(ErrorType.CONTENT_OWNER);
         }
 
-        CommentLike commentLike = commentLikeRepository.findByUserAndComment(user, comment)
-                .orElseGet(() -> new CommentLike(user, comment));
+        CommentLike commentLike = commentLikeRepository.findByUserAndComment(loginUser, comment)
+                .orElseGet(() -> new CommentLike(loginUser, comment));
 
-        commentLike.update();
+        commentLike.updateLiked();
         commentLikeRepository.save(commentLike);
 
         return calculateCommentLike(commentLike, comment);
+    }
+
+
+    //유저 검증 로직
+    public void validateUser(User loginUser){
+        userRepository.findById(loginUser.getId()).orElseThrow(() ->
+                new CustomException(ErrorType.NOT_FOUND_USER));
+
+        if(loginUser.getUserStatus().equals(UserStatus.DEACTIVATE)){
+            throw new CustomException(ErrorType.DEACTIVATE_USER);
+        }
+
+        if(loginUser.getUserStatus().equals(UserStatus.BLOCKED)){
+            throw new CustomException(ErrorType.BLOCKED_USER);
+        }
+    }
+
+    //레스토랑 검증 및 정보 가져오기
+    public Restaurant getValidatedRestaurant(Long restaurantId){
+        return restaurantRepository.findById(restaurantId).orElseThrow(() ->
+                new CustomException(ErrorType.NOT_FOUND_RESTAURANT));
+    }
+
+    //댓글 검증 및 정보 가져오기
+    public Comment getValidatedComment(Long commentId){
+        return commentRepository.findById(commentId).orElseThrow(() ->
+                new CustomException(ErrorType.NOT_FOUND_COMMENT));
     }
 
     private LikeResponseDto calculateRestaurantLike(RestaurantLike restaurantLike, Restaurant restaurant) {

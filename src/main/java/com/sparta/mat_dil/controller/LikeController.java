@@ -16,27 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/like")
+@RequestMapping("/{contentType}/{contentId}")
 @RequiredArgsConstructor
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PutMapping("/{contentType}/{contentId}")
+    @PutMapping("/like")
     public ResponseEntity<ResponseDataDto<LikeResponseDto>> updateRestaurantLike(@PathVariable("contentType") ContentTypeEnum contentType, @PathVariable("contentId") Long contentId, @AuthenticationPrincipal UserDetailsImpl userDetails) throws CustomException {
 
-        LikeResponseDto likeResponseDto;
+        LikeResponseDto likeResponseDto = likeService.updateContentLike(contentType, contentId, userDetails.getUser());
 
-        if (contentType.equals(ContentTypeEnum.RESTAURANT)) {
-            likeResponseDto = likeService.updateRestaurantLike(contentId, userDetails.getUser());
-        } else {
-            likeResponseDto = likeService.updateCommentLike(contentId, userDetails.getUser());
-        }
+        ResponseStatus responseStatus = likeResponseDto.isLiked() ? ResponseStatus.LIKE_CREATE_SUCCESS : ResponseStatus.LIKE_DELETE_SUCCESS;
 
-        if (likeResponseDto.isLiked()) {
-            return ResponseEntity.ok(new ResponseDataDto<>(ResponseStatus.LIKE_CREATE_SUCCESS, likeResponseDto));
-        } else {
-            return ResponseEntity.ok(new ResponseDataDto<>(ResponseStatus.LIKE_DELETE_SUCCESS, likeResponseDto));
-        }
+        return ResponseEntity.ok(new ResponseDataDto<>(responseStatus, likeResponseDto));
     }
 }
