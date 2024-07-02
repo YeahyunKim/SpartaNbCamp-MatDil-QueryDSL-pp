@@ -274,6 +274,11 @@ Content-Type: application/json
 }
 
 
+### 29.특정 댓글 조회
+GET http://localhost:8080/restaurants/{{restaurantId}}/comments/{{commentId}}
+Content-Type: application/json
+
+
 ### 29.댓글 수정
 PUT http://localhost:8080/restaurants/{{restaurantId}}/comments/{{editCommentId}}
 Content-Type: application/json
