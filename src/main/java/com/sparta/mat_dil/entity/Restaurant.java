@@ -27,7 +27,7 @@ public class Restaurant extends Timestamped{
     private User user;
 
     @Column(nullable = false)
-    private Long likes = 0L;
+    private Long likesCnt = 0L;
 
     @Column
     private Boolean pinned;
@@ -44,8 +44,8 @@ public class Restaurant extends Timestamped{
     }
 
     public Long updateLike(boolean islike){
-        if(islike){this.likes += 1;}
-        else{this.likes -= 1;}
-        return this.likes;
+        if(islike){this.likesCnt += 1;}
+        else{this.likesCnt -= 1;}
+        return this.likesCnt;
     }
 }

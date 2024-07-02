@@ -30,7 +30,7 @@ public class Comment extends Timestamped {
     private String description;
 
     @Column(nullable = false)
-    private Long likes = 0L;
+    private Long likesCnt = 0L;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentLike> commentLikes;
@@ -47,8 +47,8 @@ public class Comment extends Timestamped {
     }
 
     public Long updateLike(boolean isLike){
-        if(isLike){this.likes += 1;}
-        else{this.likes -= 1;}
-        return this.likes;
+        if(isLike){this.likesCnt += 1;}
+        else{this.likesCnt -= 1;}
+        return this.likesCnt;
     }
 }
