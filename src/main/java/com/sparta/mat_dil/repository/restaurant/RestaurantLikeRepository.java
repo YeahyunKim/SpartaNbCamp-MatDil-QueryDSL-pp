@@ -1,4 +1,4 @@
-package com.sparta.mat_dil.repository;
+package com.sparta.mat_dil.repository.restaurant;
 
 import com.sparta.mat_dil.entity.Restaurant;
 import com.sparta.mat_dil.entity.RestaurantLike;
@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RestaurantLikeRepository extends JpaRepository<RestaurantLike, Long> {
+public interface RestaurantLikeRepository extends JpaRepository<RestaurantLike, Long>, RestaurantLikeRepositoryQuery {
     Optional<RestaurantLike> findByUserAndRestaurant(User user, Restaurant restaurant);
 }

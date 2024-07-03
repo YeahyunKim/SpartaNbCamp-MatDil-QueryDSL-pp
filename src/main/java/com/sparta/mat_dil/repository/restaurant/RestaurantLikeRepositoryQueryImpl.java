@@ -1,9 +1,7 @@
 package com.sparta.mat_dil.repository.restaurant;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.mat_dil.entity.QRestaurantLike;
-import com.sparta.mat_dil.entity.RestaurantLike;
-import com.sparta.mat_dil.entity.User;
+import com.sparta.mat_dil.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -11,17 +9,19 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class RestaurantLikeRepositoryImplQuery implements RestaurantLikeRepositoryQuery {
+public class RestaurantLikeRepositoryQueryImpl implements RestaurantLikeRepositoryQuery {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<RestaurantLike> findLikedRestaurantsByUser(User user, int offset, int limit) {
+    public List<Restaurant> findLikedRestaurantsByUser(Long id, int limit) {
+        QRestaurant qRestaurant = QRestaurant.restaurant;
         QRestaurantLike qRestaurantLike = QRestaurantLike.restaurantLike;
 
-        return queryFactory.selectFrom(qRestaurantLike)
-                .where(qRestaurantLike.user.eq(user))
+        return queryFactory.select(qRestaurant)
+                .from(qRestaurant)
+                .join(qRestaurantLike).on(qRestaurant.id.eq(qRestaurantLike.restaurant.id))
+                .where(qRestaurantLike.user.id.eq(id).and(qRestaurantLike.Liked.isTrue()))
                 .orderBy(qRestaurantLike.createdAt.desc())
-                .offset(offset)
                 .limit(limit)
                 .fetch();
     }

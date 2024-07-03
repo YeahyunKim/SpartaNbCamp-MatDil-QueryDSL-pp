@@ -1,10 +1,12 @@
-package com.sparta.mat_dil.repository;
+package com.sparta.mat_dil.repository.restaurant;
 
+import com.sparta.mat_dil.entity.Restaurant;
 import com.sparta.mat_dil.entity.RestaurantLike;
 import com.sparta.mat_dil.entity.User;
 
 import java.util.List;
 
-public interface RestaurantLikeQueryRepository {
-    List<RestaurantLike> findLikedRestaurantsByUser(User user, int offset, int limit);
+public interface RestaurantLikeRepositoryQuery {
+    List<Restaurant> findLikedRestaurantsByUser(Long id, int limit);
+
 }
