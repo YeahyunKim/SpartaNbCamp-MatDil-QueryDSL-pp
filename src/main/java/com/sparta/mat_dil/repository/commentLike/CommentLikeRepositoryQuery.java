@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface CommentLikeRepositoryQuery {
     List<Comment> findLikedCommentsByUser(Long id, int limit);
+    long countCommentLikesByUserId(Long id);
 
 }

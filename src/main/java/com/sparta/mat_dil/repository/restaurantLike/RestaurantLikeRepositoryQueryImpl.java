@@ -25,4 +25,12 @@ public class RestaurantLikeRepositoryQueryImpl implements RestaurantLikeReposito
                 .limit(limit)
                 .fetch();
     }
+
+    @Override
+    public long countRestaurantLikesByUserId(Long userId) {
+        QRestaurantLike qRestaurantLike = QRestaurantLike.restaurantLike;
+        return queryFactory.selectFrom(qRestaurantLike)
+                .where(qRestaurantLike.user.id.eq(userId))
+                .fetchCount();
+    }
 }

@@ -25,4 +25,12 @@ public class CommentLikeRepositoryQueryImpl implements CommentLikeRepositoryQuer
                 .limit(limit)
                 .fetch();
     }
+
+    @Override
+    public long countCommentLikesByUserId(Long userId) {
+        QCommentLike qCommentLike = QCommentLike.commentLike;
+        return queryFactory.selectFrom(qCommentLike)
+                .where(qCommentLike.user.id.eq(userId))
+                .fetchCount();
+    }
 }

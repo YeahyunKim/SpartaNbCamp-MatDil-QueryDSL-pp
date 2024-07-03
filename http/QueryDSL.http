@@ -142,7 +142,7 @@ POST http://localhost:8080/users/logout
 
 
 ### 음식점 ID, 댓글 ID
-@restaurantId_like = 2
+@restaurantId_like = 3
 @commentId_like = 2
 
 
@@ -160,3 +160,7 @@ GET http://localhost:8080/RESTAURANT/liked
 
 ### 4.좋아요 한 댓글 조회 - 음식점 (판매자만 가능)
 GET http://localhost:8080/COMMENT/liked
+
+
+### 프로필 조회
+GET http://localhost:8080/users

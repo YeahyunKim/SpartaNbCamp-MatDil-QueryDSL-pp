@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface RestaurantLikeRepositoryQuery {
     List<Restaurant> findLikedRestaurantsByUser(Long id, int limit);
+    long countRestaurantLikesByUserId(Long userId);
 
 }

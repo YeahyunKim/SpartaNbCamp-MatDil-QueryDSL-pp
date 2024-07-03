@@ -12,6 +12,8 @@ import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.jwt.JwtUtil;
 import com.sparta.mat_dil.repository.PasswordHistoryRepository;
 import com.sparta.mat_dil.repository.UserRepository;
+import com.sparta.mat_dil.repository.commentLike.CommentLikeRepository;
+import com.sparta.mat_dil.repository.restaurantLike.RestaurantLikeRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,6 +30,8 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RestaurantLikeRepository restaurantLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
     private final PasswordHistoryRepository passwordHistoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -152,8 +156,14 @@ public class UserService {
 
     }
 
+    @Transactional
     public ProfileResponseDto getProfile(Long userId) {
-        return new ProfileResponseDto(findById(userId));
+        ProfileResponseDto profileResponseDto = new ProfileResponseDto(findById(userId));
+        long restaurantsLikedCnt = restaurantLikeRepository.countRestaurantLikesByUserId(userId);
+        long commentsLikedCnt = commentLikeRepository.countCommentLikesByUserId(userId);
+        profileResponseDto.updateContentLike(restaurantsLikedCnt, commentsLikedCnt);
+
+        return profileResponseDto;
     }
 
     public User findById(Long id) {
