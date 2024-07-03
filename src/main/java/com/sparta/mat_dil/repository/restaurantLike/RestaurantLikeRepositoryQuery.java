@@ -1,8 +1,6 @@
-package com.sparta.mat_dil.repository.restaurant;
+package com.sparta.mat_dil.repository.restaurantLike;
 
 import com.sparta.mat_dil.entity.Restaurant;
-import com.sparta.mat_dil.entity.RestaurantLike;
-import com.sparta.mat_dil.entity.User;
 
 import java.util.List;
 

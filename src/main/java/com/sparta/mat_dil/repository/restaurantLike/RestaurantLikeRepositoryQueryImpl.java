@@ -1,4 +1,4 @@
-package com.sparta.mat_dil.repository.restaurant;
+package com.sparta.mat_dil.repository.restaurantLike;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.mat_dil.entity.*;

@@ -76,6 +76,18 @@ Content-Type: application/json
   "userType": "SUPPLIER"
 }
 
+### 1-1.판매자 회원가입
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "accountId": "supplier1",
+  "password": "Supplier1!",
+  "name": "판매자1",
+  "email": "supplier1@gmail.com",
+  "userType": "SUPPLIER"
+}
+
 
 ### 2.판매자 로그인
 POST http://localhost:8080/users/login
@@ -84,6 +96,15 @@ Content-Type: application/json
 {
   "accountId": "supplier0",
   "password": "Supplier0!"
+}
+
+### 2-1.판매자1 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "accountId": "supplier1",
+  "password": "Supplier1!"
 }
 
 ### 2.음식점 생성 - 원할머니 보쌈 (id = 1)
@@ -122,11 +143,11 @@ POST http://localhost:8080/users/logout
 
 ### 음식점 ID, 댓글 ID
 @restaurantId_like = 2
-@commentId_like = 1
+@commentId_like = 2
 
 
 ### 1.좋아요 등록 - 댓글 (판매자만 가능)
-PUT http://localhost:8080/COMMENT/{{commentId}}/like
+PUT http://localhost:8080/COMMENT/1/like
 
 
 ### 2.좋아요 등록 - 음식점 (구매자만 가능)
@@ -134,4 +155,8 @@ PUT http://localhost:8080/RESTAURANT/{{restaurantId_like}}/like
 
 
 ### 3.좋아요 한 레스토랑 조회 - 음식점 (구매자만 가능)
-GET http://localhost:8080/RESTAURANT/{{restaurantId_like}}/liked
+GET http://localhost:8080/RESTAURANT/liked
+
+
+### 4.좋아요 한 댓글 조회 - 음식점 (판매자만 가능)
+GET http://localhost:8080/COMMENT/liked

@@ -1,5 +1,6 @@
 package com.sparta.mat_dil.controller;
 
+import com.sparta.mat_dil.dto.CommentResponseDto;
 import com.sparta.mat_dil.dto.LikeResponseDto;
 import com.sparta.mat_dil.dto.ResponseDataDto;
 import com.sparta.mat_dil.dto.RestaurantResponseDto;
@@ -18,13 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{contentType}/{contentId}")
 @RequiredArgsConstructor
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PutMapping("/like")
+    @PutMapping("/{contentType}/{contentId}/like")
     public ResponseEntity<ResponseDataDto<LikeResponseDto>> updateRestaurantLike(@PathVariable("contentType") ContentTypeEnum contentType, @PathVariable("contentId") Long contentId, @AuthenticationPrincipal UserDetailsImpl userDetails) throws CustomException {
 
         LikeResponseDto likeResponseDto = likeService.updateContentLike(contentType, contentId, userDetails.getUser());
@@ -34,11 +34,19 @@ public class LikeController {
         return ResponseEntity.ok(new ResponseDataDto<>(responseStatus, likeResponseDto));
     }
 
-    @GetMapping("/liked")
+    @GetMapping("/RESTAURANT/liked")
     public Page<RestaurantResponseDto> getLikedRestaurants(
             @AuthenticationPrincipal UserDetailsImpl loginUser,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         return likeService.getLikedRestaurants(loginUser.getUser(), page, size);
+    }
+
+    @GetMapping("/COMMENT/liked")
+    public Page<CommentResponseDto> getLikedComments(
+            @AuthenticationPrincipal UserDetailsImpl loginUser,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return likeService.getLikedComments(loginUser.getUser(), page, size);
     }
 }

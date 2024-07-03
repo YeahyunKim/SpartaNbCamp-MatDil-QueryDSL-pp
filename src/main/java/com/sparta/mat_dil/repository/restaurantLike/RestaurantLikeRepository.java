@@ -1,10 +1,9 @@
-package com.sparta.mat_dil.repository.restaurant;
+package com.sparta.mat_dil.repository.restaurantLike;
 
 import com.sparta.mat_dil.entity.Restaurant;
 import com.sparta.mat_dil.entity.RestaurantLike;
 import com.sparta.mat_dil.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
