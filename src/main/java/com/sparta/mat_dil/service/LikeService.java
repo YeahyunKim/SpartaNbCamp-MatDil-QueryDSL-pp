@@ -1,14 +1,23 @@
 package com.sparta.mat_dil.service;
 
 import com.sparta.mat_dil.dto.LikeResponseDto;
+import com.sparta.mat_dil.dto.RestaurantResponseDto;
 import com.sparta.mat_dil.entity.*;
 import com.sparta.mat_dil.enums.ContentTypeEnum;
 import com.sparta.mat_dil.enums.ErrorType;
 import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.repository.*;
+import com.sparta.mat_dil.repository.restaurant.RestaurantLikeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -77,6 +86,23 @@ public class LikeService {
         commentLikeRepository.save(commentLike);
 
         return calculateCommentLike(commentLike, comment);
+    }
+
+    /** [getLikedRestaurants()] 좋아요 누른 레스토랑 리스트 가져오기
+     * @param loginUser 로그인 유저 정보
+     * @param page 요청할 페이지 번호
+     * @param size 안에 컨텐트 수
+    * @return List<RestaurantResponseDto>
+    **/
+    public Page<RestaurantResponseDto> getLikedRestaurants(User loginUser, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        int limit = pageable.getPageSize();
+
+        List<Restaurant> likedRestaurants = restaurantLikeRepository.findLikedRestaurantsByUser(loginUser.getId(), limit);
+
+        return new PageImpl<>(likedRestaurants.stream()
+                .map(RestaurantResponseDto::new)
+                .collect(Collectors.toList()));
     }
 
 
