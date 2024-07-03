@@ -1,0 +1,137 @@
+//################ 구매자 생성 영역 ############//
+//###########################################//
+### 1.구매자 회원가입
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "accountId": "consumer0",
+  "password": "Consumer0!",
+  "name": "구매자",
+  "email": "consumer@gmail.com",
+  "userType": "CONSUMER"
+}
+
+
+### 2.구매자 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "accountId": "consumer0",
+  "password": "Consumer0!"
+}
+
+### 음식점 ID, 댓글 ID, 수정/삭제할 댓글ID
+@restaurant_Id = 1
+@commentId = 1
+@editCommentId = 3
+
+### 3.댓글 등록 (id = 1)
+POST http://localhost:8080/restaurants/{{restaurant_Id}}/comments
+Content-Type: application/json
+
+{
+  "description": "음식이 정말 ㅁㅏㅅ있어요"
+}
+
+### 4.댓글 등록 (id = 2)
+POST http://localhost:8080/restaurants/{{restaurant_Id}}/comments
+Content-Type: application/json
+
+{
+  "description": "음식이 정말 ㅁㅏㅅ있어요"
+}
+
+### 5.댓글 등록 (id = 3)
+POST http://localhost:8080/restaurants/{{restaurant_Id}}/comments
+Content-Type: application/json
+
+{
+  "description": "음식이 정말 ㅁㅏㅅ있어요"
+}
+
+### 6. 구매 아이디 로그아웃
+POST http://localhost:8080/users/logout
+
+
+
+
+################ 판매자 생성 영역 ############
+##########################################
+### 음식점 ID, 수정/삭제할 음식점 ID
+@id = 1
+@editId = 3
+
+
+### 1.판매자 회원가입
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "accountId": "supplier0",
+  "password": "Supplier0!",
+  "name": "판매자",
+  "email": "supplier@gmail.com",
+  "userType": "SUPPLIER"
+}
+
+
+### 2.판매자 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "accountId": "supplier0",
+  "password": "Supplier0!"
+}
+
+### 2.음식점 생성 - 원할머니 보쌈 (id = 1)
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+
+{
+  "restaurantName": "원할머니보쌈",
+  "description": "세상에서 가장 쫄깃하고 맛있는 보쌈집"
+}
+
+### 3.음식점 생성 - 스시앤스시 (id = 2)
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+
+{
+  "restaurantName": "스시앤스시",
+  "description": "연어가 입안에서 요동치는 맛스시"
+}
+
+
+### 4.음식점 생성 - 돼지구이 (id = 3)
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+
+{
+  "restaurantName": "돼지구이",
+  "description": "돼지고기가 일품인 고깃집"
+}
+
+
+### 5. 판매자 아이디 로그아웃
+POST http://localhost:8080/users/logout
+
+
+
+### 음식점 ID, 댓글 ID
+@restaurantId_like = 2
+@commentId_like = 1
+
+
+### 1.좋아요 등록 - 댓글 (판매자만 가능)
+PUT http://localhost:8080/COMMENT/{{commentId}}/like
+
+
+### 2.좋아요 등록 - 음식점 (구매자만 가능)
+PUT http://localhost:8080/RESTAURANT/{{restaurantId_like}}/like
+
+
+### 3.좋아요 한 레스토랑 조회 - 음식점 (구매자만 가능)
+GET http://localhost:8080/RESTAURANT/{{restaurantId_like}}/liked
