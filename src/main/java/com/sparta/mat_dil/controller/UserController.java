@@ -30,7 +30,7 @@ public class UserController {
     //회원 탈퇴
     @PatchMapping
     public ResponseEntity<ResponseMessageDto> withdrawUser(@Valid @RequestBody PasswordRequestDto requestDTO,
-        @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.withdrawUser(requestDTO, userDetails.getUser());
         return ResponseEntity.ok(new ResponseMessageDto(ResponseStatus.DEACTIVATE_USER_SUCCESS));
     }
@@ -38,7 +38,7 @@ public class UserController {
     //로그아웃
     @PostMapping("/logout")
     public ResponseEntity<ResponseMessageDto> logout(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse res,
-                                                     HttpServletRequest req){
+                                                     HttpServletRequest req) {
 
         userService.logout(userDetails.getUser(), res, req);
         return ResponseEntity.ok(new ResponseMessageDto(ResponseStatus.LOGOUT_SUCCESS));
@@ -58,4 +58,19 @@ public class UserController {
         ProfileResponseDto responseDto = userService.update(userDetails.getUser().getId(), requestDto);
         return ResponseEntity.ok(new ResponseDataDto<>(ResponseStatus.PROFILE_UPDATE_SUCCESS, responseDto));
     }
+
+    //팔로우 하기
+    @PostMapping("/{id}/following")
+    public ResponseEntity<ResponseMessageDto> followUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.followUser(id, userDetails.getUser());
+        return ResponseEntity.ok(new ResponseMessageDto(ResponseStatus.FOLLOW_SUCCESS));
+    }
+
+
+    @DeleteMapping("/{id}/following")
+    public ResponseEntity<ResponseMessageDto> unfollowUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.unfollowUser(id, userDetails.getUser());
+        return ResponseEntity.ok(new ResponseMessageDto(ResponseStatus.UNFOLLOW_SUCCESS));
+    }
+
 }

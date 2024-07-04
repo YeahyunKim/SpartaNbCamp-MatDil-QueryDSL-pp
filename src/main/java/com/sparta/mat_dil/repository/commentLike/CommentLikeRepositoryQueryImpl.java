@@ -1,5 +1,6 @@
 package com.sparta.mat_dil.repository.commentLike;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.mat_dil.entity.*;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,13 @@ public class CommentLikeRepositoryQueryImpl implements CommentLikeRepositoryQuer
     public List<Comment> findLikedCommentsByUser(Long id, int limit) {
         QComment qComment = QComment.comment;
         QCommentLike qCommentLike = QCommentLike.commentLike;
+        JPAQuery<Comment> query =queryFactory.select(qComment)
+                .from(qComment)
+                .join(qCommentLike).on(qComment.id.eq(qCommentLike.comment.id))
+                .where(qCommentLike.user.id.eq(id).and(qCommentLike.Liked.isTrue()))
+                .orderBy(qCommentLike.createdAt.desc())
+                .limit(limit);
+
 
         return queryFactory.select(qComment)
                 .from(qComment)

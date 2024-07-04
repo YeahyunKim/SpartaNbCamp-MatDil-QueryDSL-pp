@@ -4,12 +4,14 @@ import com.sparta.mat_dil.dto.PasswordRequestDto;
 import com.sparta.mat_dil.dto.ProfileRequestDto;
 import com.sparta.mat_dil.dto.ProfileResponseDto;
 import com.sparta.mat_dil.dto.UserRequestDto;
+import com.sparta.mat_dil.entity.Follow;
 import com.sparta.mat_dil.entity.PasswordHistory;
 import com.sparta.mat_dil.entity.User;
 import com.sparta.mat_dil.entity.UserStatus;
 import com.sparta.mat_dil.enums.ErrorType;
 import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.jwt.JwtUtil;
+import com.sparta.mat_dil.repository.FollowRepository;
 import com.sparta.mat_dil.repository.PasswordHistoryRepository;
 import com.sparta.mat_dil.repository.UserRepository;
 import com.sparta.mat_dil.repository.commentLike.CommentLikeRepository;
@@ -30,6 +32,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final FollowRepository followRepository;
     private final RestaurantLikeRepository restaurantLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
     private final PasswordHistoryRepository passwordHistoryRepository;
@@ -152,8 +155,6 @@ public class UserService {
                 res.addCookie(cookie);
             }
         }
-
-
     }
 
     @Transactional
@@ -172,4 +173,38 @@ public class UserService {
         );
     }
 
+    @Transactional
+    public void followUser(Long followingUserId, User follower) {
+        // 1차 검증 팔로우할 유저 존재 여부
+        User following = findById(followingUserId);
+
+        // 2차 검증 자기자신 팔로우 불가
+        if (followingUserId.equals(follower.getId())) {
+            throw new CustomException(ErrorType.INVALID_FOLLOW_REQUEST);
+        }
+
+        System.out.println("follow 조회 = " + followRepository.findByFollowerAndFollowing(follower, following));
+
+        // 3차 검증 중복 팔로우 불가능
+        if (followRepository.findByFollowerAndFollowing(follower, following).isPresent()) {
+            throw new CustomException(ErrorType.ALREADY_FOLLOWING);
+        }
+
+        Follow follow = new Follow(follower, following);
+
+        followRepository.save(follow);
+    }
+
+    @Transactional
+    public void unfollowUser(Long followingUserId, User follower) {
+        // 1차 검증 언팔로우할 유저 존재 여부
+        User following = findById(followingUserId);
+
+        // 2차 검증 중복 언팔로우 불가능
+        if (followRepository.findByFollowerAndFollowing(follower, following).isEmpty()) {
+            throw new CustomException(ErrorType.NOT_FOUND_FOLLOW);
+        }
+
+        followRepository.delete(followRepository.findByFollowerAndFollowing(follower, following).get());
+    }
 }

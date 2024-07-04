@@ -164,3 +164,9 @@ GET http://localhost:8080/COMMENT/liked
 
 ### 프로필 조회
 GET http://localhost:8080/users
+
+### 팔로우 하기
+POST http://localhost:8080/users/1/following
+
+### 언팔로우
+DELETE http://localhost:8080/users/1/following
