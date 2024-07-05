@@ -42,7 +42,7 @@ public enum ResponseStatus {
     //팔로우
     FOLLOW_SUCCESS(HttpStatus.OK, "팔로우에 성공하였습니다."),
     UNFOLLOW_SUCCESS(HttpStatus.OK, "팔로우가 취소되었습니다."),
-    GET_FOLLOWING_USER_RESTAURANTS_SUCCESS(HttpStatus.OK, "팔로우가 취소되었습니다."),
+    GET_FOLLOWING_USER_RESTAURANTS_SUCCESS(HttpStatus.OK, "팔로우한 유저의 레스토랑 리스트를 조회합니다."),
 
 
     // [ADMIN]
