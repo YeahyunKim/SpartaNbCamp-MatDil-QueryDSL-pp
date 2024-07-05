@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -67,10 +68,20 @@ public class UserController {
     }
 
 
+    //언팔로우 하기
     @DeleteMapping("/{id}/following")
     public ResponseEntity<ResponseMessageDto> unfollowUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.unfollowUser(id, userDetails.getUser());
         return ResponseEntity.ok(new ResponseMessageDto(ResponseStatus.UNFOLLOW_SUCCESS));
+    }
+
+    //팔로워 레스토랑 조회하기
+    @GetMapping("/follow/restaurants")
+    public ResponseEntity<ResponseDataDto<Page<RestaurantResponseDto>>> getFollowRestaurants(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                             @RequestParam() int page, @RequestParam(required = false, defaultValue = "createdAt") String sortBy){
+        Page<RestaurantResponseDto> responseDtoPage = userService.getFollowerRestaurants(userDetails.getUser(), page - 1, sortBy);
+
+        return ResponseEntity.ok(new ResponseDataDto<>(ResponseStatus.GET_FOLLOWING_USER_RESTAURANTS_SUCCESS, responseDtoPage));
     }
 
 }

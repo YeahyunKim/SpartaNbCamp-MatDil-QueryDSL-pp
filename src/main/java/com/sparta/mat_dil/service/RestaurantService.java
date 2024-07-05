@@ -11,13 +11,12 @@ import com.sparta.mat_dil.entity.UserType;
 import com.sparta.mat_dil.enums.ErrorType;
 import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.repository.FoodRepository;
-import com.sparta.mat_dil.repository.RestaurantRepository;
+import com.sparta.mat_dil.repository.restaurant.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

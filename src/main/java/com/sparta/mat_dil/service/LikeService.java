@@ -10,6 +10,7 @@ import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.repository.*;
 import com.sparta.mat_dil.repository.commentLike.CommentLikeRepository;
 import com.sparta.mat_dil.repository.CommentRepository;
+import com.sparta.mat_dil.repository.restaurant.RestaurantRepository;
 import com.sparta.mat_dil.repository.restaurantLike.RestaurantLikeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

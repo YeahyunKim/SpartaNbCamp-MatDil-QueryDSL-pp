@@ -136,7 +136,27 @@ Content-Type: application/json
 }
 
 
-### 5. 판매자 아이디 로그아웃
+### 5.음식점 생성 - 냉면집 (id = 4)
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+
+{
+  "restaurantName": "냉면맛집",
+  "description": "돼지고기가 일품인 고깃집"
+}
+
+
+### 6.음식점 생성 - 돼지구이 (id = 5)
+POST http://localhost:8080/restaurants
+Content-Type: application/json
+
+{
+  "restaurantName": "족발",
+  "description": "족발은 누가뭐래도 최고!"
+}
+
+
+### 7. 판매자 아이디 로그아웃
 POST http://localhost:8080/users/logout
 
 
@@ -161,12 +181,14 @@ GET http://localhost:8080/RESTAURANT/liked
 ### 4.좋아요 한 댓글 조회 - 음식점 (판매자만 가능)
 GET http://localhost:8080/COMMENT/liked
 
-
 ### 프로필 조회
 GET http://localhost:8080/users
 
 ### 팔로우 하기
-POST http://localhost:8080/users/1/following
+POST http://localhost:8080/users/2/following
 
 ### 언팔로우
-DELETE http://localhost:8080/users/1/following
+DELETE http://localhost:8080/users/2/following
+
+### 팔로우 유저 음식점 조회
+GET http://localhost:8080/users/follow/restaurants?page=1&sortBy=id

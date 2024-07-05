@@ -9,7 +9,7 @@ import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.repository.FoodRepository;
 import com.sparta.mat_dil.repository.OrderDetailsRepository;
 import com.sparta.mat_dil.repository.OrderRepository;
-import com.sparta.mat_dil.repository.RestaurantRepository;
+import com.sparta.mat_dil.repository.restaurant.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,6 @@ public class OrderService {
     private final FoodRepository foodRepository;
     private final RestaurantRepository restaurantRepository;
     private final OrderDetailsRepository orderDetailsRepository;
-
 
     @Transactional
     public OrderDetailDataDto<List<OrderResponseDto>> create(Long restaurantsId, List<Long> foodIdList, User user) {
@@ -53,8 +52,5 @@ public class OrderService {
         OrderDetailDataDto<List<OrderResponseDto>> orderDetailDataDto = new OrderDetailDataDto<>(ResponseStatus.FOOD_CHECK_SUCCESS, orderList, sum);
 
         return orderDetailDataDto;
-
     }
-
-
 }

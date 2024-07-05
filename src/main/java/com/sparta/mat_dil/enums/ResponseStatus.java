@@ -42,6 +42,7 @@ public enum ResponseStatus {
     //팔로우
     FOLLOW_SUCCESS(HttpStatus.OK, "팔로우에 성공하였습니다."),
     UNFOLLOW_SUCCESS(HttpStatus.OK, "팔로우가 취소되었습니다."),
+    GET_FOLLOWING_USER_RESTAURANTS_SUCCESS(HttpStatus.OK, "팔로우가 취소되었습니다."),
 
 
     // [ADMIN]
@@ -58,10 +59,9 @@ public enum ResponseStatus {
     PROFILES_CHECK_SUCCESS(HttpStatus.OK, "전체 사용자를 조회합니다."),
 
     // 권한
-    USERTYPE_CHANGE_SUCCESS(HttpStatus.OK, "권한이 수정되었습니다."),
+    USERTYPE_CHANGE_SUCCESS(HttpStatus.OK, "권한이 수정되었습니다.");
 
 
-    ;
     private final HttpStatus httpStatus;
     private final String message;
 }

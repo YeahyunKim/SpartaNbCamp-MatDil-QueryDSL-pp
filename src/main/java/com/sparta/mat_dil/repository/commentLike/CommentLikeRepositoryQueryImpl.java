@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -17,13 +18,6 @@ public class CommentLikeRepositoryQueryImpl implements CommentLikeRepositoryQuer
     public List<Comment> findLikedCommentsByUser(Long id, int limit) {
         QComment qComment = QComment.comment;
         QCommentLike qCommentLike = QCommentLike.commentLike;
-        JPAQuery<Comment> query =queryFactory.select(qComment)
-                .from(qComment)
-                .join(qCommentLike).on(qComment.id.eq(qCommentLike.comment.id))
-                .where(qCommentLike.user.id.eq(id).and(qCommentLike.Liked.isTrue()))
-                .orderBy(qCommentLike.createdAt.desc())
-                .limit(limit);
-
 
         return queryFactory.select(qComment)
                 .from(qComment)
@@ -35,10 +29,11 @@ public class CommentLikeRepositoryQueryImpl implements CommentLikeRepositoryQuer
     }
 
     @Override
-    public long countCommentLikesByUserId(Long userId) {
+    public Long countCommentLikesByUserId(Long userId) {
         QCommentLike qCommentLike = QCommentLike.commentLike;
-        return queryFactory.selectFrom(qCommentLike)
+        return queryFactory.select(qCommentLike.count())
+                .from(qCommentLike)
                 .where(qCommentLike.user.id.eq(userId))
-                .fetchCount();
+                .fetchOne();
     }
 }

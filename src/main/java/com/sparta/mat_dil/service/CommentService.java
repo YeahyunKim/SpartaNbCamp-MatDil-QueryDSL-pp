@@ -8,7 +8,7 @@ import com.sparta.mat_dil.entity.User;
 import com.sparta.mat_dil.enums.ErrorType;
 import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.repository.CommentRepository;
-import com.sparta.mat_dil.repository.RestaurantRepository;
+import com.sparta.mat_dil.repository.restaurant.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

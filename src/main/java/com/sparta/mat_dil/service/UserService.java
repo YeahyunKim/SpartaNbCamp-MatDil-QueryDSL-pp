@@ -1,39 +1,40 @@
 package com.sparta.mat_dil.service;
 
-import com.sparta.mat_dil.dto.PasswordRequestDto;
-import com.sparta.mat_dil.dto.ProfileRequestDto;
-import com.sparta.mat_dil.dto.ProfileResponseDto;
-import com.sparta.mat_dil.dto.UserRequestDto;
-import com.sparta.mat_dil.entity.Follow;
-import com.sparta.mat_dil.entity.PasswordHistory;
-import com.sparta.mat_dil.entity.User;
-import com.sparta.mat_dil.entity.UserStatus;
+import com.sparta.mat_dil.dto.*;
+import com.sparta.mat_dil.entity.*;
 import com.sparta.mat_dil.enums.ErrorType;
 import com.sparta.mat_dil.exception.CustomException;
 import com.sparta.mat_dil.jwt.JwtUtil;
 import com.sparta.mat_dil.repository.FollowRepository;
 import com.sparta.mat_dil.repository.PasswordHistoryRepository;
+import com.sparta.mat_dil.repository.restaurant.RestaurantRepository;
 import com.sparta.mat_dil.repository.UserRepository;
 import com.sparta.mat_dil.repository.commentLike.CommentLikeRepository;
 import com.sparta.mat_dil.repository.restaurantLike.RestaurantLikeRepository;
+import com.sparta.mat_dil.util.PageUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService extends PageUtil {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
     private final RestaurantLikeRepository restaurantLikeRepository;
+    private final RestaurantRepository restaurantRepository;
     private final CommentLikeRepository commentLikeRepository;
     private final PasswordHistoryRepository passwordHistoryRepository;
     private final PasswordEncoder passwordEncoder;
@@ -173,6 +174,7 @@ public class UserService {
         );
     }
 
+    // 유저 팔로우
     @Transactional
     public void followUser(Long followingUserId, User follower) {
         // 1차 검증 팔로우할 유저 존재 여부
@@ -195,6 +197,7 @@ public class UserService {
         followRepository.save(follow);
     }
 
+    // 유저 언팔로우
     @Transactional
     public void unfollowUser(Long followingUserId, User follower) {
         // 1차 검증 언팔로우할 유저 존재 여부
@@ -206,5 +209,20 @@ public class UserService {
         }
 
         followRepository.delete(followRepository.findByFollowerAndFollowing(follower, following).get());
+    }
+
+
+    //팔로우 유저 레스토랑 목록 조회
+    @Transactional(readOnly = true)
+    public Page<RestaurantResponseDto> getFollowerRestaurants(User loginUser, int page, String sortBy) {
+        Pageable pageable = createPageable(page, sortBy);
+
+        List<Restaurant> restaurants = restaurantRepository.findFollowUserRestaurantsByUser(loginUser.getId(), pageable);
+
+        Long pageCount = restaurantRepository.followUserRestaurantsCount(loginUser.getId());
+
+        List<RestaurantResponseDto> restatrantRestaurantDtoList = restaurants.stream().map(RestaurantResponseDto::new).toList();
+
+        return new PageImpl<>(restatrantRestaurantDtoList, pageable, pageCount);
     }
 }
